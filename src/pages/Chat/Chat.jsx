@@ -11,7 +11,6 @@ const Chat = () => {
         <LeftSideBar/>
         <ChatBox/>
         <RightSideBar/>
-
       </div>
 
     </div>

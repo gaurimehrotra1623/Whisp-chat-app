@@ -1,10 +1,6 @@
 .chat{
     min-height: 100vh;
-    background: linear-gradient(
-        135deg, 
-        rgba(10, 10, 20, 0.9), 
-        rgba(30, 0, 60, 0.9)
-      );
+    background: url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHI0aWJmc2R0ZDkyNzd6cGt5eDViaXp0NWhqZThvZ3FmNThycm1zMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UYBDCJjwOd9Re/giphy.gif');
     display: grid;
     place-items: center;  
 }
@@ -14,5 +10,5 @@
     max-width: 1000px;
     background-color: aliceblue;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr
 }
