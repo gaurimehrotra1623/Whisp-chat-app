@@ -9,7 +9,7 @@ const Login = () => {
         <img src={assets.ooga} alt=" " className='logo'/>
         <form className='login-form'>
             <h2>{currState}</h2>
-            {currState === "Sign Up" ? <input type="text"placeholder='username' className="form-input" required/> : null } 
+            {currState === "Sign Up" ? <input type="text"placeholder='Username' className="form-input" required/> : null } 
             <input type="email" placeholder='Email address' className="form-input" required/>
             <input type="password" placeholder='Password' className="form-input" required />
             <button type='submit'>{currState === "Sign Up" ? "Create Account" : "Login Now"}</button>
