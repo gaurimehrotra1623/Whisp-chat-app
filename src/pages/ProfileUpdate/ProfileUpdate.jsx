@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import "./ProfileUpdate.css"
 import assets from '../../assets/assets'
 import { onAuthStateChanged } from 'firebase/auth';
@@ -7,6 +7,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import upload from '../../lib/upload';
+import { AppContext } from '../../context/AppContext';
 
 const ProfileUpdate = () => {
   const navigate = useNavigate()
@@ -15,6 +16,8 @@ const ProfileUpdate = () => {
   const [bio, setBio]= useState("")
   const [uid, setUid]= useState("")
   const [prevImage, setPrevImage]= useState("")
+  const {setUserData} = useContext(AppContext)
+
   const profileUpdate = async (event) => {
     event.preventDefault()
     try {
@@ -37,8 +40,13 @@ const ProfileUpdate = () => {
           name: name
         })
       }
+      const snap = await getDoc(docRef)
+      setUserData(snap.data());
+      navigate('/chat');
+
     } catch (error) {
-      
+      console.error(error)
+      toast.error(error.message)
     }
 
     
@@ -80,7 +88,7 @@ const ProfileUpdate = () => {
           <textarea onChange={(e)=> setBio(e.target.value)} value ={bio} placeholder='Write your bio....' required></textarea>
           <button type="submit">Save</button>
         </form>
-        <img className="logo-img"src={image ? URL.createObjectURL(image) : assets.logo} alt="" />
+        <img className="logo-img"src={image ? URL.createObjectURL(image) : prevImage ? prevImage : assets.logo} alt="" />
       </div>
     </div>
   )
