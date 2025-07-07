@@ -1,29 +1,26 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './RightSideBar.css'
 import assets from '../../assets/assets'
 import { logout } from '../../config/firebase'
+import { AppContext } from '../../context/AppContext'
+import { useNavigate } from 'react-router-dom'
 
 const RightSideBar = () => {
+  const { selectedUser } = useContext(AppContext)
+  const navigate = useNavigate()
+  const handleLogout = async () => {
+    await logout()
+    navigate('/')
+  }
   return (
     <div className='rs'>
         <div className="rs-profile">
-            <img src={assets.profile_img} alt="" />
-            <h3>Richard Sanford<img src={assets.green_dot} className='dot'/></h3>
-            <p>Hey there! I am Richard!</p>
+            <img src={assets.logo} alt="Profile" />
+            <h3>{selectedUser ? (selectedUser.username || selectedUser.name || selectedUser.email) : "Select a user"}<img src={assets.green_dot} className='dot'/></h3>
+            <p>{selectedUser ? selectedUser.bio : ""}</p>
         </div>
         <hr />
-        <div className="rs-media">
-            <p>Media</p>
-            <div>
-                <img src={assets.pic1} alt="" />
-                <img src={assets.pic2} alt="" />
-                <img src={assets.pic3} alt="" />
-                <img src={assets.pic4} alt="" />
-                <img src={assets.pic1} alt="" />
-                <img src={assets.pic2} alt="" />
-            </div>
-        </div>
-        <button onClick={()=>logout()}>Logout</button>
+        <button onClick={handleLogout}>Logout</button>
     </div>
   )
 }

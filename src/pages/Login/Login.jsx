@@ -1,7 +1,9 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import "./Login.css"
 import assets from '../../assets/assets'
 import { signup , login} from '../../config/firebase'
+import { useNavigate } from 'react-router-dom'
+import { AppContext } from '../../context/AppContext'
 
 const Login = () => {
 
@@ -9,13 +11,17 @@ const Login = () => {
   const [userName, setUserName]= useState("")
   const [email, setEmail]= useState("")
   const [password, setPassword]= useState("")
+  const navigate = useNavigate();
+  const { loadUserData } = useContext(AppContext);
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     if (currState === "Sign Up") {
       await signup(userName, email, password);
+      navigate('/chat');
     }
     else{
       await login(email,password)
+      navigate('/chat');
     }
   };
   return (

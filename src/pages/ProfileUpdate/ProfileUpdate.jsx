@@ -18,12 +18,21 @@ const ProfileUpdate = () => {
   const [prevImage, setPrevImage]= useState("")
   const {setUserData} = useContext(AppContext)
 
+  const profileImages = [
+    assets.profile_img,
+    assets.profile_alison,
+    assets.profile_marco,
+    assets.profile_martin,
+    assets.profile_enrique
+  ];
+
+  function getRandomProfileImg() {
+    return profileImages[Math.floor(Math.random() * profileImages.length)];
+  }
+
   const profileUpdate = async (event) => {
     event.preventDefault()
     try {
-      if(!prevImage && !image){
-        toast.error("Upload profile picture!")
-      }
       const docRef = doc(db, 'users', uid)
       if (image){
         const imgUrl= await upload(image)
@@ -48,8 +57,6 @@ const ProfileUpdate = () => {
       console.error(error)
       toast.error(error.message)
     }
-
-    
   }
 
   useEffect(()=>{
@@ -79,16 +86,13 @@ const ProfileUpdate = () => {
       <div className="profile-container">
         <form onSubmit={profileUpdate}>
           <h3>Profile Details</h3>
-          <label htmlFor="avatar">
-            <input onChange={(e)=> setImage(e.target.files[0])} type="file" id='avatar' accept='.png, .jpg, .jpeg' hidden />
-            <img className="profile-pic" src={image ? URL.createObjectURL(image) : assets.avatar_icon} alt="" />
-            Upload profile image
-          </label>
-          <input onChange={(e)=> setName(e.target.value)} value= {name} type="text" placeholder='Write your name....' required />
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px'}}>
+            <img className="profile-pic" src={assets.logo} alt="Profile" />
+          </div>
           <textarea onChange={(e)=> setBio(e.target.value)} value ={bio} placeholder='Write your bio....' required></textarea>
           <button type="submit">Save</button>
         </form>
-        <img className="logo-img"src={image ? URL.createObjectURL(image) : prevImage ? prevImage : assets.logo} alt="" />
+        <img className="logo-img"src={assets.logo} alt="Profile" />
       </div>
     </div>
   )

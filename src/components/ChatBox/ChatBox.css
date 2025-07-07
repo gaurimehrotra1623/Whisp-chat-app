@@ -88,6 +88,8 @@
 }
 .r-msg .msg{
     border-radius: 8px 8px 8px 0px;
+    background-color: #5a5a8a;
+    color: white;
 }
 .s-msg div, .r-msg div{
     text-align: center;
@@ -97,4 +99,15 @@
     max-width: 230px;
     margin-bottom: 30px;
     border-radius: 10px;
+}
+.s-msg .msg, .r-msg .msg {
+    position: relative;
+    padding-bottom: 16px;
+}
+.s-msg .msg-time, .r-msg .msg-time {
+    position: absolute;
+    right: 8px;
+    bottom: 2px;
+    font-size: 9px;
+    color: #e0e0e0;
 }

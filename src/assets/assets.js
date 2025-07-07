@@ -14,6 +14,10 @@ import arrow_icon from './arrow_icon.png'
 import green_dot from './green_dot.png'
 import logo from './logo.png'
 import ooga from './ooga.png'
+import profile_alison from './profile_alison.png'
+import profile_marco from './profile_marco.png'
+import profile_martin from './profile_martin.png'
+import profile_enrique from './profile_enrique.png'
 
 const assets = {
     avatar_icon,
@@ -25,6 +29,10 @@ const assets = {
     pic3,
     pic4,
     profile_img,
+    profile_alison,
+    profile_marco,
+    profile_martin,
+    profile_enrique,
     search_icon,
     send_button,
     add_icon,
