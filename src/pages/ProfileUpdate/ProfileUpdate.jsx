@@ -87,12 +87,12 @@ const ProfileUpdate = () => {
         <form onSubmit={profileUpdate}>
           <h3>Profile Details</h3>
           <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px'}}>
-            <img className="profile-pic" src={assets.logo} alt="Profile" />
+            <img className="profile-pic" src={assets.logo || '/logo.png'} alt="Profile" />
           </div>
           <textarea onChange={(e)=> setBio(e.target.value)} value ={bio} placeholder='Write your bio....' required></textarea>
           <button type="submit">Save</button>
         </form>
-        <img className="logo-img"src={assets.logo} alt="Profile" />
+        <img className="logo-img"src={assets.logo || '/logo.png'} alt="Profile" />
       </div>
     </div>
   )

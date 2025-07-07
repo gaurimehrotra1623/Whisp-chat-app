@@ -34,7 +34,7 @@ const LeftSideBar = () => {
         <div className='ls'>
             <div className="ls-top">
                 <div className="ls-nav">
-                    <img src={assets.logo} className="logo" alt="" />
+                    <img src={assets.logo || '/logo.png'} className="logo" alt="" />
                     <div className="menu">
                         <img src={assets.menu_icon} alt="" />
                         <div className='sub-menu'>
@@ -53,7 +53,7 @@ const LeftSideBar = () => {
                 {error && <div style={{color:'red', padding:'10px'}}>{error}</div>}
                 {users.map((user, index) => (
                     <div key={user.id || index} className="friends" onClick={() => setSelectedUser(user)}>
-                        <img src={assets.logo} alt="" />
+                        <img src={assets.logo || '/logo.png'} alt="" />
                         <div>
                             <p>{user.name || user.username || user.email}</p>
                             <span>{user.email}</span>

@@ -15,7 +15,7 @@ const RightSideBar = () => {
   return (
     <div className='rs'>
         <div className="rs-profile">
-            <img src={assets.logo} alt="Profile" />
+            <img src={assets.logo || '/logo.png'} alt="Profile" />
             <h3>{selectedUser ? (selectedUser.username || selectedUser.name || selectedUser.email) : "Select a user"}<img src={assets.green_dot} className='dot'/></h3>
             <p>{selectedUser ? selectedUser.bio : ""}</p>
         </div>
