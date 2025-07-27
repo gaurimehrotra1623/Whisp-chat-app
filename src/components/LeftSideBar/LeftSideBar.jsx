@@ -44,10 +44,10 @@ const LeftSideBar = () => {
                         </div>
                     </div>
                 </div>
-                <div className="ls-search">
+                {/* <div className="ls-search">
                     <img src={assets.search_icon} alt="" />
                     <input type="text" placeholder='Search here....' />
-                </div>
+                </div> */}
             </div>
             <div className="ls-list">
                 {error && <div style={{color:'red', padding:'10px'}}>{error}</div>}
