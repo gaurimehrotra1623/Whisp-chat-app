@@ -17,11 +17,11 @@ const Chat = () => {
   }, [userData, isLoading, navigate])
 
   if (isLoading) {
-    return <div>Loading...</div> // Show loading state
+    return <div>Loading...</div>
   }
 
   if (!userData) {
-    return null // Don't render anything while redirecting
+    return null
   }
 
   return (

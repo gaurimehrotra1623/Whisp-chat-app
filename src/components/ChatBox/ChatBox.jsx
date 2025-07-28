@@ -21,21 +21,50 @@ const ChatBox = () => {
 
   useEffect(() => {
     if (!userData || !selectedUser) return;
-    // Chat doc id is always the current user's id
     const chatRef = doc(db, 'chats', userData.id)
     const unsub = onSnapshot(chatRef, (docSnap) => {
       const data = docSnap.data()
       if (!data || !data.chatData) return setMessages([])
-      // Show all messages exchanged between the two users
       const filtered = data.chatData.filter(
         msg =>
           (msg.sId === userData.id && msg.rId === selectedUser.id) ||
           (msg.sId === selectedUser.id && msg.rId === userData.id)
       )
       setMessages(filtered)
+      
+      markMessagesAsRead(filtered)
     })
     return () => unsub()
   }, [userData, selectedUser])
+
+  const markMessagesAsRead = async (messages) => {
+    if (!userData || !selectedUser) return;
+    
+    try {
+      const chatRef = doc(db, 'chats', userData.id);
+      const chatSnap = await getDoc(chatRef);
+      if (!chatSnap.exists()) return;
+      
+      const chatData = chatSnap.data().chatData || [];
+      let hasChanges = false;
+      
+      const updatedChatData = chatData.map(msg => {
+        if (msg.sId === selectedUser.id && msg.rId === userData.id && msg.read !== true) {
+          hasChanges = true;
+          return { ...msg, read: true };
+        }
+        return msg;
+      });
+      
+      if (hasChanges) {
+        await updateDoc(chatRef, {
+          chatData: updatedChatData
+        });
+      }
+    } catch (error) {
+      console.error('Error marking messages as read:', error);
+    }
+  }
 
   const handleSend = async () => {
     if (!input.trim() || !userData || !selectedUser) {
@@ -48,10 +77,10 @@ const ChatBox = () => {
       sId: userData.id,
       rId: selectedUser.id,
       text: input,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      read: false
     };
     try {
-      // Ensure chat docs exist
       const chatSnap1 = await getDoc(chatRef1);
       if (!chatSnap1.exists()) {
         await setDoc(chatRef1, { chatData: [] });
@@ -62,7 +91,6 @@ const ChatBox = () => {
         await setDoc(chatRef2, { chatData: [] });
         console.log('Created chat doc for selected user');
       }
-      // Log for debugging
       console.log('Sending message:', msg);
       await updateDoc(chatRef1, {
         chatData: arrayUnion(msg)

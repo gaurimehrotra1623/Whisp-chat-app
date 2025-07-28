@@ -14,7 +14,6 @@ const AppContextProvider = (props)=>{
     const [currentUserId, setCurrentUserId]= useState(null)
     
     const loadUserData = async (uid) => {
-        // Prevent loading the same user multiple times
         if (currentUserId === uid && userData) {
             return
         }
@@ -24,9 +23,7 @@ const AppContextProvider = (props)=>{
             const userRef= doc(db,'users',uid)
             const userSnap= await getDoc(userRef)
             
-            // If user document doesn't exist yet, wait a bit and try again
             if (!userSnap.exists()) {
-                // Wait a bit for the document to be created (especially for new signups)
                 setTimeout(async () => {
                     await loadUserData(uid)
                 }, 1000)
@@ -53,14 +50,11 @@ const AppContextProvider = (props)=>{
         }
     }
 
-    // Add authentication listener
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is signed in, load their data but don't navigate automatically
                 await loadUserData(user.uid)
             } else {
-                // User is signed out
                 setUserData(null)
                 setChatData(null)
                 setSelectedUser(null)

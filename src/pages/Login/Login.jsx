@@ -21,13 +21,11 @@ const Login = () => {
     try {
       if (currState === "Sign Up") {
         const userData = await signup(userName, email, password);
-        // For new signups, set userData and navigate to profile
         setUserData(userData);
         navigate('/profile');
       }
       else{
         await login(email,password)
-        // For login, check if user has a name and navigate accordingly
         const currentUser = auth.currentUser;
         if (currentUser) {
           const userRef = doc(db, 'users', currentUser.uid);

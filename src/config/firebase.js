@@ -37,11 +37,11 @@ const signup= async(username,email,password)=>{
             chatData:[]
         })
         toast.success("Account created successfully!");
-        return userData; // Return the user data
+        return userData;
     } catch (error) {
         console.error(error)
         toast.error(error.code.split('/')[1].split('-').join(' '))
-        throw error; // Re-throw the error so Login component can catch it
+        throw error;
     }
 }
 const login = async (email,password) => {
@@ -52,7 +52,7 @@ const login = async (email,password) => {
     catch (error) {
         console.error(error)
         toast.error(error.code.split('/')[1].split('-').join(' '))
-        throw error; // Re-throw the error so Login component can catch it
+        throw error;
     }
 }
 const logout =async ()=>{

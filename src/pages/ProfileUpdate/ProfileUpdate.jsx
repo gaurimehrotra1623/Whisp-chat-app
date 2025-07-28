@@ -49,7 +49,7 @@ const ProfileUpdate = () => {
       }
       const snap = await getDoc(docRef)
       setUserData(snap.data());
-      navigate('/chat'); // Navigate to chat after profile is saved
+      navigate('/chat');
     } catch (error) {
       console.error(error)
       toast.error(error.message)
@@ -68,7 +68,6 @@ const ProfileUpdate = () => {
         setPrevImage(userData.avatar)
       }
     } else {
-      // If no userData, redirect to login
       navigate('/')
     }
   },[userData, navigate])
