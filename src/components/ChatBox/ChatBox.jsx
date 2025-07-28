@@ -4,20 +4,15 @@ import assets from '../../assets/assets'
 import { AppContext } from '../../context/AppContext'
 import { doc, onSnapshot, updateDoc, arrayUnion, getDoc, setDoc } from 'firebase/firestore'
 import { db } from '../../config/firebase'
-
-const profileImages = [
-  assets.profile_img,
-  assets.profile_alison,
-  assets.profile_marco,
-  assets.profile_martin,
-  assets.profile_enrique
-];
-const randomProfileImg = profileImages[Math.floor(Math.random() * profileImages.length)];
+import { logout } from '../../config/firebase'
+import { useNavigate } from 'react-router-dom'
 
 const ChatBox = () => {
   const { userData, selectedUser } = useContext(AppContext)
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState("")
+  const navigate = useNavigate();
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth <= 900);
 
   useEffect(() => {
     if (!userData || !selectedUser) return;
@@ -32,12 +27,25 @@ const ChatBox = () => {
       )
       setMessages(filtered)
       
-      markMessagesAsRead(filtered)
+      markMessagesAsRead()
     })
     return () => unsub()
   }, [userData, selectedUser])
 
-  const markMessagesAsRead = async (messages) => {
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileOrTablet(window.innerWidth <= 900);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
+
+  const markMessagesAsRead = async () => {
     if (!userData || !selectedUser) return;
     
     try {
@@ -111,7 +119,11 @@ const ChatBox = () => {
       <div className="chat-user">
         <img src={assets.logo || '/logo.png'} alt="" />
         <p>{selectedUser ? (selectedUser.name || selectedUser.username || selectedUser.email) : "Select a user"} <img className='dot' src={assets.green_dot} alt=""/></p>
-        <img src={assets.help_icon} className= "help" alt="" />
+        {isMobileOrTablet ? (
+          <button className="cb-logout-btn" onClick={handleLogout}>Logout</button>
+        ) : (
+          <img src={assets.help_icon} className= "help" alt="" />
+        )}
       </div>
       <div className="chat-msg">
         {messages.slice().reverse().map((msg, idx) => (

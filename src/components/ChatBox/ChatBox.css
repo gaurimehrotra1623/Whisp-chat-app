@@ -111,3 +111,18 @@
     font-size: 9px;
     color: #e0e0e0;
 }
+.cb-logout-btn {
+  background-color: #37375A;
+  color: white;
+  border: none;
+  border-radius: 2em;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  font-family: inherit;
+  font-weight: 400;
+  cursor: pointer;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
