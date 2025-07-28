@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import "./ProfileUpdate.css"
 import assets from '../../assets/assets'
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth, db } from '../../config/firebase';
+import { db } from '../../config/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -14,9 +13,8 @@ const ProfileUpdate = () => {
   const [image, setImage]= useState(false);
   const [name, setName]= useState("")
   const [bio, setBio]= useState("")
-  const [uid, setUid]= useState("")
   const [prevImage, setPrevImage]= useState("")
-  const {setUserData} = useContext(AppContext)
+  const {userData, setUserData} = useContext(AppContext)
 
   const profileImages = [
     assets.profile_img,
@@ -33,7 +31,7 @@ const ProfileUpdate = () => {
   const profileUpdate = async (event) => {
     event.preventDefault()
     try {
-      const docRef = doc(db, 'users', uid)
+      const docRef = doc(db, 'users', userData.id)
       if (image){
         const imgUrl= await upload(image)
         setPrevImage(imgUrl)
@@ -51,8 +49,7 @@ const ProfileUpdate = () => {
       }
       const snap = await getDoc(docRef)
       setUserData(snap.data());
-      navigate('/chat');
-
+      navigate('/chat'); // Navigate to chat after profile is saved
     } catch (error) {
       console.error(error)
       toast.error(error.message)
@@ -60,26 +57,21 @@ const ProfileUpdate = () => {
   }
 
   useEffect(()=>{
-    onAuthStateChanged(auth,async (user) => {
-      if(user) {
-        setUid(user.uid)
-        const docRef = doc(db, "users", user.uid)
-        const docSnap= await getDoc(docRef)
-        if (docSnap.data().name){
-          setName(docSnap.data().name)
-        }
-        if (docSnap.data().bio){
-          setBio(docSnap.data().bio)
-        }
-        if (docSnap.data().avatar){
-          setPrevImage((await docSnap).data().avatar)
-        }
+    if (userData) {
+      if (userData.name){
+        setName(userData.name)
       }
-      else{
-        navigate('/')
+      if (userData.bio){
+        setBio(userData.bio)
       }
-    })
-  },[])
+      if (userData.avatar){
+        setPrevImage(userData.avatar)
+      }
+    } else {
+      // If no userData, redirect to login
+      navigate('/')
+    }
+  },[userData, navigate])
 
   return (
     <div className='profile'>

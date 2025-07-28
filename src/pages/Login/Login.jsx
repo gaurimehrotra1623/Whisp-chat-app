@@ -4,6 +4,8 @@ import assets from '../../assets/assets'
 import { signup , login} from '../../config/firebase'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
+import { auth, db } from '../../config/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Login = () => {
 
@@ -12,16 +14,36 @@ const Login = () => {
   const [email, setEmail]= useState("")
   const [password, setPassword]= useState("")
   const navigate = useNavigate();
-  const { loadUserData } = useContext(AppContext);
+  const { loadUserData, setUserData } = useContext(AppContext);
+  
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    if (currState === "Sign Up") {
-      await signup(userName, email, password);
-      navigate('/chat');
-    }
-    else{
-      await login(email,password)
-      navigate('/chat');
+    try {
+      if (currState === "Sign Up") {
+        const userData = await signup(userName, email, password);
+        // For new signups, set userData and navigate to profile
+        setUserData(userData);
+        navigate('/profile');
+      }
+      else{
+        await login(email,password)
+        // For login, check if user has a name and navigate accordingly
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          const userRef = doc(db, 'users', currentUser.uid);
+          const userSnap = await getDoc(userRef);
+          const userData = userSnap.data();
+          setUserData(userData);
+          
+          if (!userData.name || userData.name.trim() === "") {
+            navigate('/profile');
+          } else {
+            navigate('/chat');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Authentication failed:', error);
     }
   };
   return (

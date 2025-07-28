@@ -23,7 +23,7 @@ const signup= async(username,email,password)=>{
     try {
         const res = await createUserWithEmailAndPassword(auth,email,password)
         const user = res.user;
-        await setDoc(doc(db,"users", user.uid),{
+        const userData = {
             id:user.uid,
             username:username.toLowerCase(),
             email,
@@ -31,14 +31,17 @@ const signup= async(username,email,password)=>{
             avatar:"",
             bio:"Hey there! I am using Whisp!",
             lastSeen:Date.now()
-        })
+        }
+        await setDoc(doc(db,"users", user.uid), userData)
         await setDoc(doc(db, "chats",user.uid),{
             chatData:[]
         })
         toast.success("Account created successfully!");
+        return userData; // Return the user data
     } catch (error) {
         console.error(error)
         toast.error(error.code.split('/')[1].split('-').join(' '))
+        throw error; // Re-throw the error so Login component can catch it
     }
 }
 const login = async (email,password) => {
@@ -49,6 +52,7 @@ const login = async (email,password) => {
     catch (error) {
         console.error(error)
         toast.error(error.code.split('/')[1].split('-').join(' '))
+        throw error; // Re-throw the error so Login component can catch it
     }
 }
 const logout =async ()=>{
